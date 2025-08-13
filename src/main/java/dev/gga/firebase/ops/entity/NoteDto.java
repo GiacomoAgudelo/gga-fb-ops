@@ -1,4 +1,4 @@
-package dev.gga.firebase.ops.dto;
+package dev.gga.firebase.ops.entity;
 
 import java.time.Instant;
 

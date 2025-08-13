@@ -1,4 +1,7 @@
 package dev.gga.firebase.ops.dto;
 
-public record NoteRequest() {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record NoteRequest(
+@NotBlank String title,
+String content) {}
