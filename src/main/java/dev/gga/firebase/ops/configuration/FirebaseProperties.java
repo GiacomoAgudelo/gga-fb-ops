@@ -15,5 +15,7 @@ public record FirebaseProperties(
         String tokenUri,
         String authProviderX509CertUrl,
         String clientX509CertUrl,
-        HashSet<String> scopes
+        HashSet<String> scopes,
+        String dbId,
+        String storage
 ) {}

@@ -1,14 +1,17 @@
 package dev.gga.firebase.ops.configuration;
 
+
+import com. google.cloud.storage.Storage;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.storage.Bucket;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firebase.cloud.StorageClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.net.URI;
 
 @Configuration
@@ -41,7 +44,17 @@ public class FirebaseConfiguration {
     }
 
     @Bean
-    public Firestore firestore(final FirebaseApp app) {
-        return FirestoreClient.getFirestore(app);
+    public Firestore firestore(final FirebaseApp app, final FirebaseProperties p) {
+        return FirestoreClient.getFirestore(app, p.dbId());
+    }
+
+    @Bean
+    public Bucket bucket(final FirebaseApp app, final FirebaseProperties p) {
+        return StorageClient.getInstance(app).bucket(p.storage());
+    }
+
+    @Bean
+    public Storage storage(final Bucket bucket) {
+        return bucket.getStorage();
     }
 }
