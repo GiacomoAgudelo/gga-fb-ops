@@ -1,10 +1,10 @@
 package dev.gga.firebase.ops.configuration;
 
 
-import com. google.cloud.storage.Storage;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -12,6 +12,7 @@ import com.google.firebase.cloud.StorageClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.net.URI;
 
 @Configuration

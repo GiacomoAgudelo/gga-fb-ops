@@ -1,6 +1,5 @@
 package dev.gga.firebase.ops.mapper;
 
-import com.google.api.client.util.StringUtils;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
