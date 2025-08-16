@@ -21,16 +21,6 @@ public class BucketRepository {
         this.bucket = bucket;
     }
 
-    public HashSet<BlobId> findAllBlobInfo(){
-        var names = new HashSet<>();
-        return StreamSupport.stream(bucket.list().iterateAll().spliterator(), false)
-                        .map(Blob::getBlobId)
-                        .collect(Collectors.toCollection(HashSet::new));
-    }
-
-    public Optional<Blob> findBlobById(final String id) {
-         return Optional.ofNullable(bucket.get(id));
-    }
 
     public Page<Blob> findBlobByPrefixAndCurrentDirectory(final Storage.BlobListOption prefix, final Storage.BlobListOption blobListOption) {
         return bucket.list(
