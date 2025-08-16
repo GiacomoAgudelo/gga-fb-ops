@@ -1,6 +1,9 @@
 spring:
   application:
     name: gga-firebase-ops
+  mvc:
+    async:
+      request-timeout: 10m
   profiles:
     active: local
   servlet:
