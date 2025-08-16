@@ -1,5 +1,6 @@
 package dev.gga.firebase.ops.gcs.infra.adapter;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.*;
 import dev.gga.firebase.ops.gcs.configuration.GcsProperties;
 import dev.gga.firebase.ops.gcs.infra.mapper.StorageMapper;
@@ -42,6 +43,11 @@ public class GcsStorageFacade implements BucketAdmin, FolderOps, ObjectStorage {
     @Override
     public Optional<Blob> getBlobById(final String id) {
         return bucketProxy.getBlobById(id);
+    }
+
+    @Override
+    public Page<Blob> getBlobByPrefix(final String prefix) {
+        return bucketProxy.getBlobByPrefix(prefix);
     }
 
     @Override

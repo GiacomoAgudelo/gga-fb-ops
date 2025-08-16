@@ -2,9 +2,7 @@ package dev.gga.firebase.ops.folder;
 
 import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Storage;
 import dev.gga.firebase.ops.gcs.infra.adapter.ObjectStorage;
-import dev.gga.firebase.ops.repository.BucketRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,10 +19,7 @@ public class FolderService {
 
     public FolderListing listChildren(String rawPrefix) {
         String prefix = normDir(rawPrefix); // "docs/" | "" per root
-        Page<Blob> page = bucketRepository.findBlobByPrefixAndCurrentDirectory(
-                Storage.BlobListOption.prefix(prefix),
-                Storage.BlobListOption.currentDirectory() // solo figli immediati
-        );
+        Page<Blob> page = objectStorage.getBlobByPrefix(prefix);
 
         Set<String> subfolders = new TreeSet<>();
         List<FileItem> files = new ArrayList<>();
