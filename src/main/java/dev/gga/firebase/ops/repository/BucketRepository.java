@@ -1,8 +1,10 @@
 package dev.gga.firebase.ops.repository;
 
+import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -30,4 +32,10 @@ public class BucketRepository {
          return Optional.ofNullable(bucket.get(id));
     }
 
+    public Page<Blob> findBlobByPrefixAndCurrentDirectory(final Storage.BlobListOption prefix, final Storage.BlobListOption blobListOption) {
+        return bucket.list(
+                prefix,
+                blobListOption
+        );
+    }
 }

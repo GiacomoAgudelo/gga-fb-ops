@@ -1,4 +1,7 @@
 package dev.gga.firebase.ops.dto;
 
-public record FileItem() {
+public record FileItem(
+        String objectName,
+        long size,
+        String contentType) {
 }
