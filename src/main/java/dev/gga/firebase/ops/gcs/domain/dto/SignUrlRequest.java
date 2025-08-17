@@ -1,4 +1,4 @@
-package dev.gga.firebase.ops.gcs.infra.dto;
+package dev.gga.firebase.ops.gcs.domain.dto;
 
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;

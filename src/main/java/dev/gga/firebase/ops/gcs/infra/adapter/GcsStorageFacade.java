@@ -1,17 +1,16 @@
 package dev.gga.firebase.ops.gcs.infra.adapter;
 
-import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.*;
-import dev.gga.firebase.ops.gcs.configuration.GcsProperties;
+import dev.gga.firebase.ops.gcs.domain.dto.FileItem;
+import dev.gga.firebase.ops.gcs.domain.dto.FolderListing;
+import dev.gga.firebase.ops.gcs.infra.mapper.BlobMapper;
 import dev.gga.firebase.ops.gcs.infra.mapper.StorageMapper;
 import dev.gga.firebase.ops.gcs.infra.proxy.BucketProxy;
 import dev.gga.firebase.ops.gcs.infra.proxy.StorageProxy;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class GcsStorageFacade implements BucketAdmin, FolderOps, ObjectStorage {
@@ -22,6 +21,8 @@ public class GcsStorageFacade implements BucketAdmin, FolderOps, ObjectStorage {
 
     private final StorageMapper storageMapper;
 
+    private final BlobMapper blobMapper;
+
     @Value("${app.firebase.durationUrlSigned}")
     private int durationUrlSigned;
 
@@ -29,10 +30,11 @@ public class GcsStorageFacade implements BucketAdmin, FolderOps, ObjectStorage {
 
 
     public GcsStorageFacade(final StorageProxy storageProxy, final BucketProxy bucketProxy,
-                            final StorageMapper storageMapper) {
+                            final StorageMapper storageMapper, final BlobMapper blobMapper) {
         this.bucketProxy = bucketProxy;
         this.storageProxy = storageProxy;
         this.storageMapper = storageMapper;
+        this.blobMapper = blobMapper;
     }
 
     @Override
@@ -46,8 +48,28 @@ public class GcsStorageFacade implements BucketAdmin, FolderOps, ObjectStorage {
     }
 
     @Override
-    public Page<Blob> getBlobByPrefix(final String prefix) {
-        return bucketProxy.getBlobByPrefix(prefix);
+    public FolderListing getBlobByPrefix(final String prefix) {
+        var page = bucketProxy.getBlobByPrefix(prefix);
+        Set<String> subfolders = new TreeSet<>();
+        List<FileItem> files = new ArrayList<>();
+
+        for (Blob blob : page.iterateAll()) {
+            this.groupImmediateChildren(prefix, blob, subfolders, files);
+        }
+
+        files.sort(Comparator.comparing(FileItem::objectName));
+        return blobMapper.toFolderListing(prefix, subfolders, files);
+    }
+
+    private void groupImmediateChildren(final String prefix, final Blob blob, final Set<String> subfolders, final List<FileItem> files) {
+        String name = blob.getName();
+        String rest = name.substring(prefix.length());
+        int slash = rest.indexOf('/');
+        if (slash >= 0) {
+            subfolders.add(rest.substring(0, slash + 1));
+        } else {
+            files.add(blobMapper.toFileItem(blob));
+        }
     }
 
     @Override

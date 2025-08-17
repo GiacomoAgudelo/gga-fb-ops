@@ -3,6 +3,7 @@ package dev.gga.firebase.ops.archive;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.Blob;
 import dev.gga.firebase.ops.archive.interfaces.StreamingWriter;
+import dev.gga.firebase.ops.gcs.infra.adapter.ObjectStorage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -19,12 +20,11 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class ArchiveService {
 
-    private final BucketRepository bucketRepository;
+    private final ObjectStorage objectStorage;
 
-    public ArchiveService(BucketRepository bucketRepository) {
-        this.bucketRepository = bucketRepository;
+    public ArchiveService(final ObjectStorage objectStorage) {
+        this.objectStorage = objectStorage;
     }
-
 
     public StreamingWriter zipWriter(List<String> paths, boolean preservePaths) {
         List<String> snapshot = (paths == null) ? List.of() : List.copyOf(paths);
@@ -40,9 +40,9 @@ public class ArchiveService {
             for (String raw : paths) {
                 if (raw == null || raw.isBlank()) continue;
                 String objectName = sanitize(raw);
-                Optional<Blob> optionalBlob = bucketRepository.findBlobById(objectName);
+                Optional<Blob> optionalBlob = objectStorage.getBlobById(objectName);
                 if (optionalBlob.isEmpty()){
-                    continue; // oppure lancia se preferisci fallire
+                    continue;
                 }
                 var file = optionalBlob.get();
                 String entryName = toZipEntryName(objectName, preservePaths, usedNames);

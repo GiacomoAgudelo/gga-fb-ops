@@ -1,8 +1,8 @@
 package dev.gga.firebase.ops.gcs.infra.adapter;
 
-import com.google.api.gax.paging.Page;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
+import dev.gga.firebase.ops.gcs.domain.dto.FolderListing;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,5 +13,5 @@ public interface ObjectStorage {
 
     Optional<Blob> getBlobById(final String id);
 
-    Page<Blob> getBlobByPrefix(final String prefix);
+    FolderListing getBlobByPrefix(final String prefix);
 }

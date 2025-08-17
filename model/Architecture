@@ -1,0 +1,42 @@
+flowchart TD
+  %% Contesto alto livello: Controller -> Service -> Porte GCS/Firestore -> SDK
+  subgraph API
+    FolderController
+    FileController
+    ArchiveController
+    NoteController
+  end
+
+  subgraph Application
+    FolderService
+    FileService
+    ArchiveService
+    NoteService
+  end
+
+  subgraph InfraGCS[Infra GCS]
+    GcsStorageFacade
+    BucketProxy
+    StorageProxy
+    BlobMapper
+    StorageMapper
+  end
+
+  subgraph FirestoreSide[Firestore Repo]
+    FirestoreRepository
+  end
+
+  API --> Application
+  FolderService --> GcsStorageFacade
+  FileService --> GcsStorageFacade
+  ArchiveService --> GcsStorageFacade
+  NoteService --> FirestoreRepository
+
+  GcsStorageFacade --> BucketProxy
+  GcsStorageFacade --> StorageProxy
+  GcsStorageFacade --> BlobMapper
+  GcsStorageFacade --> StorageMapper
+
+  BucketProxy -->|Bucket SDK| GCS[(Google Cloud Storage)]
+  StorageProxy -->|Storage SDK| GCS
+  FirestoreRepository -->|Firestore SDK| FS[(Google Firestore)]

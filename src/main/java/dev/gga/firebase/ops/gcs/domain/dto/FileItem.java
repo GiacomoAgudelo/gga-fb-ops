@@ -1,4 +1,4 @@
-package dev.gga.firebase.ops.folder;
+package dev.gga.firebase.ops.gcs.domain.dto;
 
 public record FileItem(
         String objectName,

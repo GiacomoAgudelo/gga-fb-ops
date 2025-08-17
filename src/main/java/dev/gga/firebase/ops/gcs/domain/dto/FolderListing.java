@@ -1,4 +1,4 @@
-package dev.gga.firebase.ops.folder;
+package dev.gga.firebase.ops.gcs.domain.dto;
 
 import java.util.List;
 

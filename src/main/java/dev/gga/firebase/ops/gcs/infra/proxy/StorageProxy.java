@@ -1,14 +1,8 @@
 package dev.gga.firebase.ops.gcs.infra.proxy;
 
-import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import dev.gga.firebase.ops.gcs.infra.dto.SignUrlRequest;
-import io.grpc.Context;
+import dev.gga.firebase.ops.gcs.domain.dto.SignUrlRequest;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class StorageProxy {
